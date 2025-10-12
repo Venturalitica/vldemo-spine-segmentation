@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "kind": "conformance",
+  "system": "pilot-vertebral-imaging",
+  "payload": {
+    "clauses": [
+      {
+        "basis": "partes interesadas identificadas",
+        "clause_id": "6.2",
+        "cycle_phase": "communication",
+        "decision": "covered",
+        "measures": [],
+        "title": "Communication and consultation"
+      },
+      {
+        "basis": "criterios establecidos y aplicados (residual agregado evaluado)",
+        "clause_id": "6.3",
+        "cycle_phase": "criteria",
+        "decision": "covered",
+        "measures": [],
+        "title": "Scope, context and criteria"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "6.4.2",
+        "cycle_phase": "identification",
+        "decision": "gap",
+        "measures": [],
+        "title": "Risk identification"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "6.4.3",
+        "cycle_phase": "analysis",
+        "decision": "gap",
+        "measures": [],
+        "title": "Risk analysis"
+      },
+      {
+        "basis": "1 de 1 measure(s) citantes evaluadas pasan",
+        "clause_id": "6.4.4",
+        "cycle_phase": "evaluation",
+        "decision": "covered",
+        "measures": [
+          "vertebra-segmentation-dice"
+        ],
+        "title": "Risk evaluation"
+      },
+      {
+        "basis": "1 de 1 measure(s) citantes evaluadas pasan",
+        "clause_id": "6.5",
+        "cycle_phase": "treatment",
+        "decision": "covered",
+        "measures": [
+          "vertebra-segmentation-dice"
+        ],
+        "title": "Risk treatment"
+      },
+      {
+        "basis": "plan de seguimiento post-market con semántica Art. 72 (cita + disparador + frecuencia ISO 8601)",
+        "clause_id": "6.6",
+        "cycle_phase": "monitor",
+        "decision": "covered",
+        "measures": [],
+        "title": "Monitoring and review"
+      },
+      {
+        "basis": "evidencia signed_bundle presente",
+        "clause_id": "6.7",
+        "cycle_phase": "file",
+        "decision": "covered",
+        "measures": [],
+        "title": "Recording and reporting"
+      }
+    ],
+    "standard": "iso/23894@2023"
+  }
+}

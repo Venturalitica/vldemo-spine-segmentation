@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "kind": "conformance",
+  "system": "pilot-vertebral-imaging",
+  "payload": {
+    "clauses": [
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "6.2.1",
+        "cycle_phase": "analysis",
+        "decision": "gap",
+        "measures": [],
+        "title": "Intended purpose"
+      },
+      {
+        "basis": "mal uso razonablemente previsible declarado",
+        "clause_id": "6.2.2",
+        "cycle_phase": "analysis",
+        "decision": "covered",
+        "measures": [],
+        "title": "Reasonably foreseeable misuse"
+      },
+      {
+        "basis": "criterio risk_estimation conforme",
+        "clause_id": "6.3",
+        "cycle_phase": "estimation",
+        "decision": "covered",
+        "measures": [],
+        "title": "Risk estimation"
+      },
+      {
+        "basis": "1 de 1 measure(s) citantes evaluadas pasan",
+        "clause_id": "7",
+        "cycle_phase": "evaluation",
+        "decision": "covered",
+        "measures": [
+          "vertebra-segmentation-dice"
+        ],
+        "title": "Risk evaluation"
+      },
+      {
+        "basis": "estadísticas de potencia presentes en ≥1 control",
+        "clause_id": "8.1",
+        "cycle_phase": "testing",
+        "decision": "covered",
+        "measures": [],
+        "title": "Testing — acceptance criteria + objective evidence"
+      },
+      {
+        "basis": "criterio control_hierarchy conforme",
+        "clause_id": "9.1.2",
+        "cycle_phase": "risk_control",
+        "decision": "covered",
+        "measures": [],
+        "title": "Applying the hierarchy of risk control"
+      },
+      {
+        "basis": "1 de 1 measure(s) citantes evaluadas pasan",
+        "clause_id": "9.2",
+        "cycle_phase": "risk_control",
+        "decision": "covered",
+        "measures": [
+          "vertebra-segmentation-dice"
+        ],
+        "title": "Implementation and verification of risk control measures"
+      },
+      {
+        "basis": "criterio residual_present conforme",
+        "clause_id": "9.3",
+        "cycle_phase": "residual",
+        "decision": "covered",
+        "measures": [],
+        "title": "Residual risk evaluation"
+      },
+      {
+        "basis": "criterio overall_residual conforme",
+        "clause_id": "10",
+        "cycle_phase": "overall_residual",
+        "decision": "covered",
+        "measures": [],
+        "title": "Evaluation of overall residual risk"
+      },
+      {
+        "basis": "sin aprobación de dirección (estado del ciclo: draft/pending)",
+        "clause_id": "11",
+        "cycle_phase": "review",
+        "decision": "gap",
+        "measures": [],
+        "title": "Risk management review"
+      },
+      {
+        "basis": "evidencia signed_bundle presente",
+        "clause_id": "4.6",
+        "cycle_phase": "file",
+        "decision": "covered",
+        "measures": [],
+        "title": "Risk management file"
+      }
+    ],
+    "standard": "eu/pren-18228@2026"
+  }
+}

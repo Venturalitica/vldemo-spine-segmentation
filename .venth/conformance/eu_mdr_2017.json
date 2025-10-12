@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "kind": "conformance",
+  "system": "pilot-vertebral-imaging",
+  "payload": {
+    "clauses": [
+      {
+        "basis": "criterio overall_residual conforme",
+        "clause_id": "mdr.gspr-1-safety-performance",
+        "cycle_phase": "gspr_safety",
+        "decision": "covered",
+        "measures": [],
+        "title": "GSPR 1 — Seguridad y rendimiento conforme a la finalidad prevista: residual agregado del SaMD aceptable contra el criterio declarado (NO juzga el beneficio-riesgo clínico completo; eso es la evaluación clínica)"
+      },
+      {
+        "basis": "criterio risk_estimation conforme",
+        "clause_id": "mdr.gspr-3-risk-management",
+        "cycle_phase": "gspr_risk_management",
+        "decision": "covered",
+        "measures": [],
+        "title": "GSPR 3 — Sistema de gestión de riesgos: peligros identificados con probabilidad e impacto a lo largo del ciclo de vida (ancla ISO 14971; solapa con ISO 23894 §6)"
+      },
+      {
+        "basis": "criterio control_hierarchy conforme",
+        "clause_id": "mdr.gspr-4-risk-control",
+        "cycle_phase": "gspr_risk_control",
+        "decision": "covered",
+        "measures": [],
+        "title": "GSPR 4 — Control del riesgo en orden de prioridad (diseño seguro inherente -> protección -> información): jerarquía de controles coherente del SaMD sin hallazgos (ISO 14971 §7-8)"
+      },
+      {
+        "basis": "1 de 1 measure(s) citantes evaluadas pasan",
+        "clause_id": "mdr.gspr-8-residual-risk",
+        "cycle_phase": "gspr_residual",
+        "decision": "covered",
+        "measures": [
+          "vertebra-segmentation-dice"
+        ],
+        "title": "GSPR 5/8 — Riesgo residual aceptable tras las medidas de control: los threats con control bloqueante declaran residual evaluado (residual per-sistema; el residual global de seguridad clínica lo cierra la evaluación clínica)"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "mdr.gspr-17-1-performance",
+        "cycle_phase": "gspr_performance",
+        "decision": "gap",
+        "measures": [],
+        "title": "GSPR 17.1 — Software diseñado para repetibilidad, fiabilidad y rendimiento del SaMD conforme a la finalidad prevista (rendimiento por subgrupo/escáner)"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "mdr.gspr-17-2-sw-lifecycle",
+        "cycle_phase": "gspr_sw_lifecycle",
+        "decision": "gap",
+        "measures": [],
+        "title": "GSPR 17.2 — Software desarrollado conforme al estado del arte: ciclo de vida (IEC 62304), V&V y gobernanza del dato del SaMD acreditados por las measures de validación (cláusula paraguas)"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "mdr.gspr-17-1-single-fault",
+        "cycle_phase": "gspr_single_fault",
+        "decision": "gap",
+        "measures": [],
+        "title": "GSPR 17.1 — Condición de fallo único: medios para reducir el riesgo ante fallo único del SaMD vía supervisión HOTL/control bloqueante (proxy per-sistema; el diseño tolerante a fallos completo es de ingeniería)"
+      },
+      {
+        "basis": "partes interesadas identificadas",
+        "clause_id": "mdr.gspr-23-information",
+        "cycle_phase": "gspr_information",
+        "decision": "covered",
+        "measures": [],
+        "title": "GSPR 23 — Información suministrada: finalidad prevista, limitaciones y partes afectadas identificadas (proxy per-sistema del etiquetado/IFU; el IFU completo es entregable doc-mdr)"
+      },
+      {
+        "basis": "plan de seguimiento post-market con semántica Art. 72 (cita + disparador + frecuencia ISO 8601)",
+        "clause_id": "mdr.pms-postmarket",
+        "cycle_phase": "gspr_postmarket",
+        "decision": "covered",
+        "measures": [],
+        "title": "PMS (Art.84) / PMCF (Anexo XIV-B) — Vigilancia post-comercialización del rendimiento del SaMD: plan de monitorización declarado (el sistema/informe PMS organizacional completo es QMS, fuera; el post-market del AI Act se cita aparte)"
+      },
+      {
+        "basis": "BOM firmado presente en el bundle",
+        "clause_id": "mdr.soup-inventory",
+        "cycle_phase": "soup_inventory",
+        "decision": "covered",
+        "measures": [],
+        "title": "Inventario de SOUP identificado: componentes de terceros inventariados por nombre/versión/purl en BOM CycloneDX firmado (IEC 62304 §8.1.2; ancla GSPR 17.2; el SOUP-list completo lo materializa la nube)"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "mdr.soup-requirements",
+        "cycle_phase": "soup_requirements",
+        "decision": "gap",
+        "measures": [],
+        "title": "Requisitos funcionales y de rendimiento del SOUP y prerequisitos HW/SW verificados (IEC 62304 §5.3.3-5.3.4; ancla GSPR 17.2; sin measure que lo verifique -> Gap honesto)"
+      },
+      {
+        "basis": "plan de seguimiento post-market con semántica Art. 72 (cita + disparador + frecuencia ISO 8601)",
+        "clause_id": "mdr.soup-risk",
+        "cycle_phase": "soup_risk",
+        "decision": "covered",
+        "measures": [],
+        "title": "Análisis de riesgo del fallo del SOUP y evaluación de anomalías/CVE publicadas (IEC 62304 §7.1.2-7.1.3; ancla GSPR 3/17.2; el motor NO consume feeds CVE -> certifica plan/measure declarada, NO revisión operativa)"
+      }
+    ],
+    "standard": "eu/mdr@2017"
+  }
+}

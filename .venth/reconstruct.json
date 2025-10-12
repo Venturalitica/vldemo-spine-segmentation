@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "kind": "reconstruct",
+  "system": "pilot-vertebral-imaging",
+  "payload": {
+    "system_name": "pilot-vertebral-imaging",
+    "snapshots": [
+      {
+        "sha": "2ef30dabb91a6f80e0dafbef2c51f1abdd05e276",
+        "date": "2025-10-12T12:17:21+00:00",
+        "subject": "run: V1 evidencia (gate GREEN esperado; seed=1)"
+      }
+    ],
+    "risks": [
+      {
+        "risk_id": "risk.segmentation-accuracy-failure",
+        "identified_sha": "192718573e7a89ae8f46776615bc97308f67deb8",
+        "identified_date": "2025-10-12T12:17:21Z",
+        "provenance": "declared",
+        "assessment": {
+          "risk_id": "risk.segmentation-accuracy-failure",
+          "kind": "threat",
+          "provenance": "declared",
+          "likelihood": "POSSIBLE",
+          "residual_declared_likelihood": "UNLIKELY",
+          "dimensions": [
+            {
+              "dimension": "individual",
+              "impact": "CRITICAL",
+              "appetite": "HIGH",
+              "inherent_level": "HIGH",
+              "inherent_eval": "within",
+              "residual_level": "HIGH",
+              "residual_eval": "within"
+            }
+          ],
+          "inherent_overall": "HIGH",
+          "residual_overall": "HIGH",
+          "requires_treatment": false,
+          "control_confirmed": true,
+          "cycle": {
+            "status": "closed"
+          },
+          "priority": 4
+        }
+      },
+      {
+        "risk_id": "risk.subgroup-segmentation-bias",
+        "identified_sha": "192718573e7a89ae8f46776615bc97308f67deb8",
+        "identified_date": "2025-10-12T12:17:21Z",
+        "provenance": "declared",
+        "assessment": {
+          "risk_id": "risk.subgroup-segmentation-bias",
+          "kind": "threat",
+          "provenance": "declared",
+          "likelihood": "LIKELY",
+          "dimensions": [
+            {
+              "dimension": "individual",
+              "impact": "HIGH",
+              "appetite": "HIGH",
+              "inherent_level": "HIGH",
+              "inherent_eval": "within"
+            },
+            {
+              "dimension": "society",
+              "impact": "MEDIUM",
+              "appetite": "HIGH",
+              "inherent_level": "HIGH",
+              "inherent_eval": "within"
+            }
+          ],
+          "inherent_overall": "HIGH",
+          "requires_treatment": false,
+          "control_confirmed": true,
+          "cycle": {
+            "status": "monitored"
+          },
+          "priority": 5
+        }
+      }
+    ],
+    "approval": null,
+    "lifecycle": {
+      "state": "draft"
+    }
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "kind": "conformance",
+  "system": "pilot-vertebral-imaging",
+  "payload": {
+    "clauses": [
+      {
+        "basis": "partes interesadas identificadas",
+        "clause_id": "bias.affected_groups",
+        "cycle_phase": "bias_examination",
+        "decision": "covered",
+        "measures": [],
+        "title": "Identificación de grupos relevantes/afectados a partir de la finalidad prevista (no solo clases protegidas)"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "bias.examination",
+        "cycle_phase": "bias_examination",
+        "decision": "gap",
+        "measures": [],
+        "title": "Examen de posibles sesgos: escenarios de sesgo (grupo en riesgo/comparación, peligros y daños potenciales)"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "bias.relevant_data",
+        "cycle_phase": "data_governance",
+        "decision": "gap",
+        "measures": [],
+        "title": "Datos relevantes y suficientemente representativos; examen de lagunas de datos (data gaps) y límites contextuales"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "bias.data_sufficiency_gap",
+        "cycle_phase": "data_governance",
+        "decision": "gap",
+        "measures": [],
+        "title": "Suficiencia de datos para certificar equidad: brecha no cerrable por reentrenamiento (data_gap)"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "bias.subgroup_measurement",
+        "cycle_phase": "bias_measurement",
+        "decision": "gap",
+        "measures": [],
+        "title": "Medición de sesgo por subgrupo con umbral gobernado y potencia estadística"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "bias.mitigation",
+        "cycle_phase": "bias_mitigation",
+        "decision": "gap",
+        "measures": [],
+        "title": "Medidas para detectar, prevenir y mitigar los sesgos identificados (debiasing/tratamiento)"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "bias.residual_evaluation",
+        "cycle_phase": "bias_residual",
+        "decision": "gap",
+        "measures": [],
+        "title": "Evaluación del riesgo residual de sesgo tras la mitigación (dentro del criterio declarado)"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "bias.special_category_safeguards",
+        "cycle_phase": "bias_special_category",
+        "decision": "gap",
+        "measures": [],
+        "title": "Tratamiento excepcional de categorías especiales para detección/corrección de sesgo: salvaguardas Art. 10(5)(a)-(f)"
+      },
+      {
+        "basis": "plan de seguimiento post-market con semántica Art. 72 (cita + disparador + frecuencia ISO 8601)",
+        "clause_id": "bias.monitoring",
+        "cycle_phase": "bias_monitor",
+        "decision": "covered",
+        "measures": [],
+        "title": "Monitorización post-comercialización del sesgo y disparadores de revisión (review triggers)"
+      },
+      {
+        "basis": "evidencia signed_bundle presente",
+        "clause_id": "bias.management_file",
+        "cycle_phase": "bias_file",
+        "decision": "covered",
+        "measures": [],
+        "title": "Registro/expediente de gestión de sesgo firmado (bias scenarios versionados y documentados)"
+      }
+    ],
+    "standard": "eu/pren-18283@2026"
+  }
+}

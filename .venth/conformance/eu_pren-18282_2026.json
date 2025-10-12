@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "kind": "conformance",
+  "system": "pilot-vertebral-imaging",
+  "payload": {
+    "clauses": [
+      {
+        "basis": "criterio risk_estimation conforme",
+        "clause_id": "cyber.threat_modeling",
+        "cycle_phase": "cyber_threat_modeling",
+        "decision": "covered",
+        "measures": [],
+        "title": "Estimación completa (likelihood+impact) de los riesgos declarados, incl. el registro de amenazas ciber-específicas de IA cuando se declare (data/model poisoning, evasión adversaria, confidencialidad)"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "cyber.adversarial_robustness",
+        "cycle_phase": "cyber_robustness",
+        "decision": "gap",
+        "measures": [],
+        "title": "Resiliencia frente a ejemplos adversarios / evasión del modelo (perturbación de la entrada con intención maliciosa — distinto de la robustez formal NO maliciosa de ISO 24029-2)"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "cyber.data_model_integrity",
+        "cycle_phase": "cyber_integrity",
+        "decision": "gap",
+        "measures": [],
+        "title": "Integridad/autenticidad del artefacto, datos y pesos (anti data/model poisoning; reproducibilidad determinista del modelo entregado)"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "cyber.access_control",
+        "cycle_phase": "cyber_access_control",
+        "decision": "gap",
+        "measures": [],
+        "title": "Minimización de privilegios y control de acceso a nivel de API / invocación de herramientas: las acciones restringidas se impiden en la interfaz (no en el prompt) — least-privilege agentic"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "cyber.confidentiality",
+        "cycle_phase": "cyber_confidentiality",
+        "decision": "gap",
+        "measures": [],
+        "title": "Protección de la confidencialidad del modelo y los datos: anti model-extraction, inversión del modelo e inferencia de pertenencia (membership inference)"
+      },
+      {
+        "basis": "sin measure que la cite ni criterio/artefacto",
+        "clause_id": "cyber.residual_evaluation",
+        "cycle_phase": "cyber_residual",
+        "decision": "gap",
+        "measures": [],
+        "title": "Evaluación del riesgo residual de ciberseguridad tras los controles (dentro del criterio declarado)"
+      },
+      {
+        "basis": "plan de seguimiento post-market con semántica Art. 72 (cita + disparador + frecuencia ISO 8601)",
+        "clause_id": "cyber.monitoring",
+        "cycle_phase": "cyber_monitor",
+        "decision": "covered",
+        "measures": [],
+        "title": "Monitorización post-comercialización de incidentes/amenazas de ciberseguridad y disparadores de revisión del modelo de amenazas"
+      },
+      {
+        "basis": "evidencia signed_bundle presente",
+        "clause_id": "cyber.security_file",
+        "cycle_phase": "cyber_file",
+        "decision": "covered",
+        "measures": [],
+        "title": "Expediente de ciberseguridad firmado: medidas, resultados de pruebas/red-teaming y superficie de ataque versionados y atestados"
+      }
+    ],
+    "standard": "eu/pren-18282@2026"
+  }
+}
