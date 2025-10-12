@@ -1,0 +1,273 @@
+apiVersion: venturalitica.ai/v1alpha1
+kind: AISystem
+
+# ── Plantilla de gobernanza FICCIONALIZADA del repo demo público `vldemo-spine-segmentation`.
+# Sistema de IA médica de ALTO RIESGO: segmentación vertebral en TC para asistencia en la
+# planificación quirúrgica. SaMD MDR Clase IIb → EU AI Act Art.6(1) alto riesgo. SIN DORA.
+# Reproducer REAL en GPU: TotalSegmentator v2 (nnU-Net, Apache-2.0) sobre la cohorte pública
+# TCIA Spine-Mets-CT-SEG (CT + SEG ground-truth de vértebras, CC BY 4.0). El stage `evaluate`
+# (eval/eval.py) segmenta la cohorte EN MEMORIA y computa el Dice REAL vs el SEG ground-truth,
+# audita Art.10/Art.15 con el SDK venturalitica y promueve el ML-BOM del run → el motor MIDA el
+# control de exactitud, deriva el ciclo de vida y firma la evidencia. Las imágenes (~1.6G) NO se
+# versionan: se leen de la caché $SEI_TCIA_CACHE en el build local (una vez, en GPU).
+# OPSEC: organización ficticia (SpineCare), sistema ficticio (pilot-vertebral-imaging),
+# fabricantes anonimizados en la narrativa (Vendor-A/B/C). El repo NUNCA lleva la cohorte ni
+# imágenes médicas: solo gobernanza + los scripts del reproducer + los metadatos sin PHI.
+
+# ── 1. Identidad y finalidad del sistema ─────────────────────────────────────
+system:
+  name: pilot-vertebral-imaging
+  intended_purpose: "Segmentación vertebral automatizada en TC como apoyo a la planificación quirúrgica (eval-only sobre cohorte de validación)."
+  organization: SpineCare
+  version: "1.0.0"
+  decisions: [surgical_planning_input]
+  affected_persons: [pacientes, equipo_quirurgico]
+  component_type: ai-model
+  # Mal uso razonablemente previsible (ISO 42001 6.1.4 / EU AI Act Art.9(2)(b)).
+  potential_misuses:
+    - id: mu.extrapolacion-anatomia
+      description: "Aplicar el modelo a regiones anatómicas fuera del envelope validado asumiendo rendimiento equivalente sin re-validación."
+      addressed_by: [risk.subgroup-segmentation-bias, risk.scanner-protocol-bias]
+    - id: mu.diagnostico-sin-supervision
+      description: "Usar la segmentación generada como criterio único de planificación quirúrgica sin que un clínico revise el resultado."
+      addressed_by: [risk.subgroup-segmentation-bias, risk.segmentation-accuracy-failure]
+    - id: mu.fuera-del-envelope-de-adquisicion
+      description: "Procesar estudios adquiridos con escáneres o protocolos fuera del envelope validado (fabricante/banda de grosor no representados en la cohorte)."
+      addressed_by: [risk.scanner-protocol-bias]
+    - id: mu.uso-fuera-de-proposito
+      description: "Reutilizar el módulo para otras modalidades de imagen (RM, PET) o patologías para las que no fue validado."
+      addressed_by: []   # SIN ATENDER: control de despliegue/gobernanza, no de este programa técnico
+
+# ── 2. Naturaleza de la tarea ────────────────────────────────────────────────
+task:
+  modality: image
+  type: segmentation
+
+# ── 3. Marco regulatorio ─────────────────────────────────────────────────────
+# Segmentación vertebral preoperatoria — SaMD de alto riesgo (MDR Clase IIb, Reg. UE 2017/745)
+# y EU AI Act Art.6(1) (componente de seguridad de producto sanitario). Modalidad EVAL-ONLY:
+# no reentrena, audita una cohorte de validación. SIN DORA (no es entidad financiera).
+context:
+  applicable_standards:
+    - eu/pren-18228@2026
+    - iso/23894@2023
+    - eu/ai-act@2024
+    - eu/mdr@2017
+    - eu/pren-18283@2026
+    - eu/pren-18282@2026
+
+# ── 4. Datos y modelo ────────────────────────────────────────────────────────
+# Cohorte REAL declarada vía Croissant (TCIA Spine-Mets-CT-SEG: CT + SEG ground-truth, CC BY 4.0;
+# metadatos de adquisición sin PHI en data/trusted_metadata.csv). `artifacts.model` declara el
+# descriptor del modelo BYO (TotalSegmentator v2 / nnU-Net) que el stage `evaluate` corre en GPU
+# para producir la columna por-caso `Dice` que mide el control de exactitud.
+dataset: { croissant: data/cohort.croissant.json }
+artifacts:
+  model: { kind: totalsegmentator, seed: 1 }
+
+# ── 5. Medición y reproducción ───────────────────────────────────────────────
+# Reproducer DVC REAL (stage `evaluate`, eval/eval.py): segmenta la cohorte TCIA EN MEMORIA con
+# TotalSegmentator v2 (GPU), computa el Dice REAL vs el SEG ground-truth, la audita (vl.monitor +
+# vl.enforce Art.10/Art.15) → `metrics.json` (clave = `id` de la medida) y promueve el ML-BOM del
+# run a `.venturalitica/bom.json`. `sei run` reproduce vía `dvc repro` y ancla `dvc.lock` en la
+# evidencia firmada. Las imágenes (~1.6G) se leen de $SEI_TCIA_CACHE (no se versionan).
+pipeline: { tool: dvc, metrics: metrics.json, params: params.yaml }
+oscal: { assessment_plan: shared_data/policies/assessment_plan.oscal.yaml }
+
+# ── 5b. Evaluación declarada por humano (F5) ─────────────────────────────────
+classification:
+  tier: high
+  basis:
+    - "EU AI Act Art.6(1) (componente de seguridad de producto sanitario — SaMD MDR Clase IIb)"
+    - "Reg. UE 2017/745 MDR Anexo I GSPR (gestión de riesgo SaMD)"
+  rationale: |
+    Segmentación vertebral automatizada en TC como apoyo a la planificación
+    quirúrgica: SaMD MDR Clase IIb (Reg. UE 2017/745) → EU AI Act Art.6(1)
+    alto riesgo (componente de seguridad de un producto sanitario regulado).
+
+    DISCLOSURE (demo ilustrativo, M-8): la evidencia de exactitud (Dice) y de sesgo
+    por subgrupo se mide sobre una cohorte TRUNCADA de n=6 de los 55 estudios TC de
+    TCIA Spine-Mets-CT-SEG. La truncación (`SEI_TCIA_LIMIT`, eval/segment.py) NO es
+    un descarte estadístico: el resto de estudios tienen volúmenes TC que agotan la
+    memoria de la GPU de 8 GB (OOM), así que n=6 es ya el MÁXIMO seguro en GPU para
+    este demo, no una muestra elegida. Es una cohorte ilustrativa pequeña,
+    INFRAPOTENCIADA y NO representativa para un SaMD Clase IIb (split por edad
+    adulto=2/anciano=4; sexo ausente en 15/55). La conformidad real exigiría la
+    cohorte completa (o un subconjunto preregistrado y potenciado) con su n y
+    potencia documentados; el Dice y la brecha de subgrupo son ilustrativos del
+    flujo de gobernanza, no una caracterización clínica.
+
+# ── 6. Programa de riesgos (Art.9) ───────────────────────────────────────────
+# REGULACIÓN DUAL: como SaMD de alto riesgo, además del EU AI Act aplica la MDR (Reg. UE 2017/745);
+# las medidas mapean a su GSPR del Anexo I vía `frameworks` (rendimiento/V&V → 17.1; control de
+# riesgo → 9). SIN DORA.
+risk:
+  appetite: { individual: HIGH, society: HIGH, organization: HIGH }
+  criteria: { scale: "5x5" }
+  overall_residual_criterion: HIGH   # prEN 18228 cl. 10: criterio del residual GLOBAL (≠ apetito por-riesgo)
+  review_interval: P6M   # revisión semestral (ISO 23894 §6.6)
+  risks:
+    # ── RSK — Fallo de exactitud de segmentación vertebral (el riesgo MEDIDO) ────
+    - id: risk.segmentation-accuracy-failure
+      title: "Segmentation Accuracy Failure"
+      domain: safety
+      rationale: "Un modelo sin exactitud de segmentación suficiente puede producir planes quirúrgicos erróneos, comprometiendo la seguridad del paciente (SaMD)."
+      impact: { individual: CRITICAL }
+      likelihood: POSSIBLE
+      treat:
+        - method: REDUCE
+          action: "Acotar el Dice medio de segmentación vertebral por encima del umbral clínico."
+          controls: [eu/ai-act@2024#art-15]
+          residual_likelihood: UNLIKELY   # tras tratamiento: UNLIKELY×CRITICAL (individual) = HIGH ≤ apetito HIGH → coherente (ISO 23894 §6.5)
+          measures:
+            # CONTROL MEDIDO bloqueante: Dice medio REAL (TotalSegmentator v2 vs el SEG
+            # ground-truth de TCIA) sobre la columna por-caso `Dice`. ≈0.92 medido → > 0.85 VERDE.
+            - id: vertebra-segmentation-dice
+              metric: mean_score
+              constraint: "> 0.85"
+              severity: critical
+              enforcement: gate
+              lifecycle: [validation]
+              article: "15"
+              frameworks: [eu/mdr@2017#gspr-17.1]   # SaMD: rendimiento/repetibilidad/fiabilidad del software
+              control_tier: protective
+              # M-23: una UNICA medición de exactitud (Dice) residual evidencia SOLO la evaluación
+              # del riesgo, la verificación de su control y el residual — no la identificación, el
+              # análisis, la finalidad, el testing ni el residual GLOBAL agregado (cl.10, que es un
+              # criterio built-in del expediente, no de este control). Citas recortadas (12→6).
+              standard_clauses:
+                - "eu/pren-18228@2026#7"      # Risk evaluation
+                - "eu/pren-18228@2026#9.2"    # Implementation & verification of risk control
+                - "eu/pren-18228@2026#9.3"    # Residual risk evaluation
+                - "iso/23894@2023#6.4.4"      # Risk evaluation
+                - "iso/23894@2023#6.5"        # Risk treatment
+                - "eu/mdr@2017#mdr.gspr-8-residual-risk"
+              inputs: { score: Dice }
+            # post-market (Art.72): deriva sostenida del Dice de segmentación en producción — NO
+            # ex-ante. Declara las tres patas de un plan accionable (disparador + cadencia ISO 8601
+            # + cita) para que el gate de completitud Art.72 lo reconozca (means «72» = Declared).
+            - id: postmarket-dice-drift
+              metric: global_dice_drift
+              constraint: "< 0.05"
+              severity: high
+              enforcement: audit
+              evaluation: manual
+              lifecycle: [monitoring]
+              article: "72"
+              frameworks: [eu/mdr@2017#gspr-17.1]
+              standard_clauses: ["iso/42105@2026#monitoring"]
+              trigger: "caída sostenida del Dice medio de segmentación vertebral > 0.05 en el modelo desplegado"
+              frequency: "P3M"
+              metric_threshold: "< 0.05"
+              art72_citation: "eu/ai-act@2024#art-72"
+
+    # ── RSK — Sesgo de segmentación por subgrupo (residual con observaciones) ─────
+    - id: risk.subgroup-segmentation-bias
+      title: "Subgroup Segmentation Bias"
+      domain: fairness
+      rationale: "El modelo puede segmentar con distinta exactitud según subgrupo demográfico (edad) o técnico (fabricante/protocolo), comprometiendo la equidad del apoyo diagnóstico."
+      impact: { individual: HIGH, society: MEDIUM }
+      likelihood: LIKELY
+      treat:
+        - method: REDUCE
+          action: "Acotar la brecha de Dice del peor subgrupo demográfico/técnico. Control confirmante: supervisión humana HOTL (Art.14) sobre los casos del peor subgrupo."
+          controls: [eu/ai-act@2024#art-15, eu/ai-act@2024#art-14]
+          # SIN residual_likelihood: la brecha de subgrupo en una cohorte pequeña es una limitación
+          # del modelo, no un defecto que se corrija con un gate → mantiene observaciones en el
+          # residual global (historia honesta). Se trata con supervisión humana, no gateando a verde.
+          measures:
+            # AUDIT (NO bloquea): superficia el residual de subgrupo honestamente (Anexo IV §4); la
+            # auditoría lo registra. El control real del riesgo de subgrupo es la supervisión HOTL.
+            - id: subgroup-segmentation-bias
+              metric: group_score_gap
+              constraint: "< 0.05"
+              severity: high
+              enforcement: audit
+              lifecycle: [validation]
+              article: "15"
+              frameworks: [eu/mdr@2017#gspr-9]   # control de riesgo: rendimiento consistente en la población prevista
+              inputs: { score: Dice, dimension: age_group }
+            # Supervisión humana HOTL (Art.14): un clínico valida la segmentación de los casos del
+            # peor subgrupo antes de su uso aguas abajo. Diseñado ex-ante; opera post-market (Fase 2).
+            - id: human-oversight-worst-case-review
+              metric: hotl_worst_case_review_declared
+              constraint: "> 0"
+              severity: high
+              enforcement: audit
+              evaluation: manual
+              lifecycle: [monitoring]
+              article: "14"
+              frameworks: [eu/mdr@2017#gspr-17.1]
+              standard_clauses: ["eu/pren-18228@2026#14", "iso/42105@2026#intervention"]
+
+    # ── RSK — Fallo de gobernanza del dato de la cohorte (Art.10) ───────────────
+    - id: risk.data-governance-failure
+      title: "Cohort Data Governance Failure"
+      domain: data
+      rationale: "Una cohorte de validación con sesgo de representación o privacidad insuficiente invalida las conclusiones de rendimiento y expone datos médicos sensibles."
+      impact: { society: HIGH, organization: MEDIUM }
+      likelihood: POSSIBLE
+      treat:
+        - method: REDUCE
+          action: "Privacidad y completitud del dato de validación (gobernanza del dato)."
+          controls: [eu/ai-act@2024#art-10]
+          measures:
+            # Declaración organizativa (no medida): gobernanza del dato de validación atestiguada.
+            - id: oversight-data-governance
+              metric: oversight_data_governance_declared
+              constraint: "> 0"
+              severity: medium
+              enforcement: audit
+              evaluation: manual
+              lifecycle: [monitoring]
+              article: "10"
+              frameworks: [eu/mdr@2017#gspr-17.1]
+              standard_clauses: ["iso/iec-5259-2@2024#balance"]
+
+    # ── RSK — Sesgo por escáner / protocolo / grosor (Art.15) ───────────────────
+    - id: risk.scanner-protocol-bias
+      title: "Scanner and Protocol Bias"
+      domain: safety
+      rationale: "El rendimiento del modelo puede degradarse con escáneres o protocolos de adquisición fuera del envelope validado (fabricante/banda de grosor no representados en la cohorte)."
+      impact: { individual: HIGH }
+      likelihood: POSSIBLE
+      treat:
+        - method: REDUCE
+          action: "Documentar el envelope de adquisición validado (fabricantes Vendor-A/Vendor-B/Vendor-C y bandas de grosor de corte) y supervisar la deriva por escáner."
+          controls: [eu/ai-act@2024#art-15]
+          measures:
+            # Declaración organizativa (no medida): envelope de adquisición documentado.
+            - id: oversight-acquisition-envelope
+              metric: oversight_acquisition_envelope_declared
+              constraint: "> 0"
+              severity: medium
+              enforcement: audit
+              evaluation: manual
+              lifecycle: [monitoring]
+              article: "15"
+              frameworks: [eu/mdr@2017#gspr-9]
+              standard_clauses: ["iso/27001@2022#A.8"]
+
+    # ── RSK — Provisiones transversales de supervisión humana (Art.14) ──────────
+    - id: risk.insufficient-human-oversight
+      title: "Provisiones transversales de supervisión humana"
+      domain: governance
+      rationale: "Sin un modo de supervisión clínica declarado (HOTL) y un rol con competencia/autoridad, el cribador puede usarse como diagnóstico definitivo sin revisión humana."
+      impact: { individual: HIGH, organization: HIGH }
+      likelihood: POSSIBLE
+      treat:
+        - method: REDUCE
+          action: "Declarar el modo de supervisión (HOTL) y el rol clínico asignado con competencia."
+          controls: [eu/ai-act@2024#art-14]
+          measures:
+            - id: oversight-mode
+              metric: oversight_mode_declared
+              constraint: "> 0"
+              severity: medium
+              enforcement: audit
+              evaluation: manual
+              lifecycle: [monitoring]
+              article: "14"
+              frameworks: [eu/mdr@2017#gspr-17.1]
+              standard_clauses: ["eu/pren-18229-1@2026#human-oversight", "iso/8200@2024#control-transfer"]
+  applicability: {}

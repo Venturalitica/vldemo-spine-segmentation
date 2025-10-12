@@ -1,0 +1,6 @@
+# Marcador mínimo del pipeline reproducible. La evaluación REAL no ramifica sobre ningún
+# hiperparámetro (corre TotalSegmentator sobre la cohorte completa y mide el Dice real): el
+# resultado lo determina el modelo + la cohorte TCIA, no una semilla. Se conserva `seed: 1`
+# para que `pipeline.params` siga siendo un descriptor válido.
+cohort: tcia-spine-mets
+seed: 1

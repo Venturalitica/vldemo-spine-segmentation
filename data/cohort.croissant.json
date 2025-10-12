@@ -1,0 +1,49 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "cr": "http://mlcommons.org/croissant/",
+    "rai": "http://mlcommons.org/croissant/RAI/",
+    "dataType": "http://mlcommons.org/croissant/dataType/"
+  },
+  "@type": "Dataset",
+  "conformsTo": "http://mlcommons.org/croissant/1.0",
+  "name": "spine-mets-cohort-eval",
+  "description": "Cohorte de validación de pilot-vertebral-imaging: TCIA Spine-Mets-CT-SEG (CT + SEG ground-truth de vértebras). Metadatos de adquisición DICOM REALES extraídos vía la NBIA REST API. El stage `evaluate` corre TotalSegmentator v2 en GPU sobre las imágenes (caché SEI_TCIA_CACHE) y computa el Dice REAL vs el SEG ground-truth EN MEMORIA (sin persistir cohort_results.csv, §3.4): la cohorte por-caso se audita online.",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "url": "https://www.cancerimagingarchive.net/collection/spine-mets-ct-seg/",
+  "version": "3.0.0",
+  "citation": "TCIA Spine-Mets-CT-SEG, DOI 10.7937/kh36-ds04 (CC BY 4.0).",
+  "rai:dataCollection": "TC de columna (público, TCIA). CT + objetos DICOM SEG (segmentación manual de vértebras = ground-truth para el Dice). Metadatos DICOM REALES (Sex/Age/Manufacturer/ModelName/SliceThickness/KVP/PixelSpacing) vía NBIA API para estratificación de fairness/robustez (Art.10/15).",
+  "rai:dataBiases": "Desbalance por fabricante (SIEMENS SOMATOM Confidence vs GE LightSpeed RT16) y grosor de corte (0.5–3.0mm). Caso duro real (13653): metástasis que distorsiona la vértebra → Dice bajo → motiva subgroup-segmentation-bias / scanner-protocol-bias.",
+  "rai:sensitiveData": "Sex, Age (cuasi-identificadores; k-anonimato sobre [age_group, Manufacturer] generalizado). Sex ausente en parte de las series (dato real incompleto).",
+  "distribution": [
+    {
+      "@type": "cr:FileObject",
+      "@id": "tcia-dicom",
+      "name": "tcia-dicom",
+      "description": "Imágenes TCIA Spine-Mets-CT-SEG (CT + SEG ground-truth) en la caché SEI_TCIA_CACHE; el stage `segment` (TotalSegmentator) las consume. No se versionan en git (13G)."
+    },
+    {
+      "@type": "cr:FileObject",
+      "@id": "trusted_metadata.csv",
+      "name": "trusted_metadata.csv",
+      "encodingFormat": "text/csv",
+      "description": "Metadatos de adquisición REALES por PatientID (TCIA vía NBIA API): Sex/Age/Manufacturer/ModelName/KVP/SliceThickness/PixelSpacing/StudyDate."
+    }
+  ],
+  "recordSet": [
+    {
+      "@type": "cr:RecordSet",
+      "@id": "patients",
+      "name": "patients",
+      "description": "Una fila por paciente de la cohorte (55 series CT reales).",
+      "field": [
+        { "@type": "cr:Field", "@id": "patients/Dice", "name": "Dice", "dataType": "sc:Float", "description": "Dice de la segmentación vertebral (salida del modelo BYO)." },
+        { "@type": "cr:Field", "@id": "patients/Sex", "name": "Sex", "dataType": "sc:Text", "rai:isProtected": true },
+        { "@type": "cr:Field", "@id": "patients/Age", "name": "Age", "dataType": "sc:Integer", "rai:isProtected": true },
+        { "@type": "cr:Field", "@id": "patients/Manufacturer", "name": "Manufacturer", "dataType": "sc:Text" },
+        { "@type": "cr:Field", "@id": "patients/SliceThickness", "name": "SliceThickness", "dataType": "sc:Float", "description": "Grosor de corte (mm) — eje del sobre operativo." }
+      ]
+    }
+  ]
+}

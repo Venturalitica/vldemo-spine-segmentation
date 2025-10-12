@@ -1,0 +1,28 @@
+# Pipeline reproducible REAL del repo demo `vldemo-spine-segmentation`. Modelo BYO REAL:
+# TotalSegmentator v2 (nnU-Net) sobre la cohorte TCIA Spine-Mets-CT-SEG en GPU. `sei run` lo
+# reproduce vía el seam Reproducer (`dvc repro`) y ancla `dvc.lock` en la evidencia firmada.
+# NO corre en el CI hermético (requiere GPU + caché TCIA en $SEI_TCIA_CACHE).
+#
+# ONLINE, SIN CSV (§3.4): un ÚNICO stage `evaluate`. `eval/eval.py` segmenta la cohorte EN
+# MEMORIA (TotalSegmentator/GPU vía `segment.segment_cohort`), la une a los metadatos de
+# adquisición y corre el SDK (vl.monitor + Art.10/Art.15) → `metrics.json` + promueve el ML-BOM
+# del run a `.venturalitica/bom.json` (lo que lee el motor). NO se persiste ningún
+# `cohort_results.csv`: el handoff segment→eval es en memoria.
+#
+#   [evaluate] TCIA cache (GPU) ─▶ segment_cohort() en memoria ⨝ trusted_metadata.csv
+#              ─▶ SDK (Art.10+Art.15) ─▶ metrics.json + .venturalitica/bom.json
+stages:
+  evaluate:
+    cmd: .venv/bin/python eval/eval.py
+    deps:
+      - eval/eval.py
+      - eval/segment.py # segmentación en memoria (segment_cohort), importada por eval.py
+      - eval/dicom_utils.py
+      - data/trusted_metadata.csv # metadatos de adquisición reales (TCIA)
+      - shared_data/policies/assessment_plan.oscal.yaml # contrato del gate (sei compile)
+    outs:
+      - .venturalitica/bom.json:
+          cache: false   # ML-BOM (CycloneDX) que viaja en la evidencia firmada
+    metrics:
+      - metrics.json: # {control_id: actual_value} o {control_id: {value, power}} (§3.2)
+          cache: false

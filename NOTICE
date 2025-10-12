@@ -1,0 +1,13 @@
+This directory references the TCIA Spine-Mets-CT-SEG collection.
+
+Source:  https://www.cancerimagingarchive.net/collection/spine-mets-ct-seg/ (The Cancer Imaging Archive)
+License: CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+DOI:     10.7937/kh36-ds04
+Cite:    TCIA Spine-Mets-CT-SEG, DOI 10.7937/kh36-ds04 (CC BY 4.0).
+
+The DICOM pixel data (CT volumes + SEG ground-truth, ~1.6 GB) is NOT committed to
+this repo: it is read at build time from the cache pointed to by $SEI_TCIA_CACHE.
+Only the per-patient acquisition metadata (data/trusted_metadata.csv, no PHI) and
+the Croissant provenance (data/cohort.croissant.json) are versioned. The vertebra
+Dice is computed REAL against the TCIA SEG ground-truth via TotalSegmentator v2 on
+GPU; see eval/segment.py and data/cohort.croissant.json for field-level provenance.

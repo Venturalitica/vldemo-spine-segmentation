@@ -1,0 +1,5 @@
+.venv/
+.dvc/cache
+.dvc/tmp
+.venturalitica/runs/
+__pycache__/
