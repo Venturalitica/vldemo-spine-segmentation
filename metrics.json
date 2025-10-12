@@ -1,0 +1,33 @@
+{
+  "vertebra-segmentation-dice": {
+    "value": 0.9182254374027252,
+    "power": {
+      "n": 6,
+      "n_clusters": 6,
+      "groups": {},
+      "ci_low": 0.9045365750789642,
+      "ci_high": 0.9298923842608928,
+      "ci_level": 0.95,
+      "method": "cluster_bootstrap",
+      "n_boot": 1000,
+      "seed": 42
+    }
+  },
+  "subgroup-segmentation-bias": {
+    "value": 0.015103384852409363,
+    "power": {
+      "n": 6,
+      "n_clusters": 6,
+      "groups": {
+        "elderly": 4,
+        "adult": 2
+      },
+      "ci_low": 0.0,
+      "ci_high": 0.04058575630187988,
+      "ci_level": 0.95,
+      "method": "cluster_bootstrap",
+      "n_boot": 1000,
+      "seed": 42
+    }
+  }
+}

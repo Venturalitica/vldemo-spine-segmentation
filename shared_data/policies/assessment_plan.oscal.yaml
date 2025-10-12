@@ -1,0 +1,80 @@
+# GENERADO por `venth compile` desde pilot-vertebral-imaging.yaml — NO editar a mano.
+# Fuente de verdad = el AssuranceProgram (capa Art.9). Las measures post-market
+# (lifecycle monitoring/production) se omiten del assessment-plan ex-ante.
+---
+component-definition:
+  uuid: 40c21bf1-3887-57b5-8826-dabd7020430e
+  metadata:
+    title: Assessment plan (compilado de AssuranceProgram 'pilot-vertebral-imaging')
+    version: 1.0.0
+    oscal-version: 1.2.2
+  components:
+  - uuid: eaaa9a55-b19c-5d18-9fc9-f7b546cdd818
+    type: software
+    title: pilot-vertebral-imaging (assurance)
+    description: Controles ex-ante compilados desde el AssuranceProgram (Art.9 → contrato del gate).
+    control-implementations:
+    - uuid: 7582014f-446a-5871-a5b3-1d12f9f16504
+      source: '#vl-ai-assurance-profile-2026'
+      description: 'Generado por `venth compile`. NO editar a mano: la fuente es el AssuranceProgram.'
+      implemented-requirements:
+      - uuid: 6b9a9fe0-179f-5437-a9d8-80ae636695ee
+        control-id: vertebra-segmentation-dice
+        description: Segmentation Accuracy Failure — mean_score
+        props:
+        - name: metric_key
+          value: mean_score
+        - name: operator
+          value: gt
+        - name: threshold
+          value: '0.85'
+        - name: severity
+          value: critical
+        - name: enforcement_mode
+          value: block
+        - name: evaluation_method
+          value: automated
+        - name: lifecycle_phase
+          value: validation
+        - name: risk_id
+          value: risk.segmentation-accuracy-failure
+        - name: control_tier
+          value: protective
+        - name: article
+          value: '15'
+        - name: frameworks
+          value: eu/mdr@2017#gspr-17.1
+        - name: standard_clauses
+          value: eu/pren-18228@2026#7,eu/pren-18228@2026#9.2,eu/pren-18228@2026#9.3,iso/23894@2023#6.4.4,iso/23894@2023#6.5,eu/mdr@2017#mdr.gspr-8-residual-risk
+        - name: score
+          value: Dice
+      - uuid: d1c0a2b9-e3f9-5287-aaa1-f6f0c64aaedc
+        control-id: subgroup-segmentation-bias
+        description: Subgroup Segmentation Bias — group_score_gap
+        props:
+        - name: metric_key
+          value: group_score_gap
+        - name: operator
+          value: lt
+        - name: threshold
+          value: '0.05'
+        - name: severity
+          value: high
+        - name: enforcement_mode
+          value: warn
+        - name: evaluation_method
+          value: automated
+        - name: lifecycle_phase
+          value: validation
+        - name: risk_id
+          value: risk.subgroup-segmentation-bias
+        - name: control_tier
+          value: protective
+        - name: article
+          value: '15'
+        - name: frameworks
+          value: eu/mdr@2017#gspr-9
+        - name: input.dimension
+          value: age_group
+        - name: score
+          value: Dice

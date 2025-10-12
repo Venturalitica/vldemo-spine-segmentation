@@ -1,0 +1,34 @@
+schema: '2.0'
+stages:
+  evaluate:
+    cmd: .venv/bin/python eval/eval.py
+    deps:
+    - path: data/trusted_metadata.csv
+      hash: md5
+      md5: 71f60281e1b2d248c5a0de9ad00db3b0
+      size: 4423
+    - path: eval/dicom_utils.py
+      hash: md5
+      md5: a05e3e60ee700ec66e5365ac01b78e99
+      size: 11779
+    - path: eval/eval.py
+      hash: md5
+      md5: 3929781daab954daae3e9ad0bcef19c8
+      size: 7106
+    - path: eval/segment.py
+      hash: md5
+      md5: b7787c9096d708dace26744919ceff2b
+      size: 20555
+    - path: shared_data/policies/assessment_plan.oscal.yaml
+      hash: md5
+      md5: 233ddfd67f3ba8c8566fa3eb70589710
+      size: 2885
+    outs:
+    - path: .venturalitica/bom.json
+      hash: md5
+      md5: fee1c8cefdd48f13ee13ee55ca4899c3
+      size: 57535
+    - path: metrics.json
+      hash: md5
+      md5: 35c94a353552b01a946904dadd7dff08
+      size: 684
